@@ -1,0 +1,39 @@
+{# Ambient blurred background; stacked behind everything #}
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" id="ambient-root">
+  <!-- subtle fallback gradient (keep) -->
+  <div class="absolute inset-0 bg-[radial-gradient(50%_50%_at_50%_50%,_rgba(147,197,253,0.05)_0%,_rgba(147,197,253,0.025)_35%,_transparent_70%)]"></div>
+
+  <!-- left-top -->
+  <div class="ambient-blob absolute -left-[12%] -top-[8%]
+              h-[clamp(28rem,48vw,64rem)] w-[clamp(28rem,48vw,64rem)]
+              rounded-full bg-emerald-400/10 blur-[200px]"
+       style="--dx:-8px; --dy:4px; --scale:1.015; --dur:19s; --delay:-2s;"></div>
+
+  <!-- center main (thinned) -->
+  <div class="ambient-blob absolute top-[24%] left-[50%]
+              h-[clamp(28rem,50vw,68rem)] w-[clamp(28rem,50vw,68rem)]
+              -translate-x-1/2 rounded-full bg-cyan-400/5 blur-[200px]"
+       style="--dx:6px; --dy:-6px; --scale:1.018; --dur:22s; --delay:-5s;"></div>
+
+  <!-- right-bottom -->
+  <div class="ambient-blob absolute -bottom-[12%] right-[6%]
+              h-[clamp(26rem,44vw,60rem)] w-[clamp(26rem,44vw,60rem)]
+              rounded-full bg-indigo-400/10 blur-[200px]"
+       style="--dx:-5px; --dy:-3px; --scale:1.012; --dur:20s; --delay:-1s;"></div>
+
+  <!-- light accents -->
+  <div class="ambient-blob absolute top-[12%] right-[30%]
+              h-[clamp(14rem,26vw,38rem)] w-[clamp(14rem,26vw,38rem)]
+              rounded-full bg-fuchsia-400/5 blur-[160px]"
+       style="--dx:4px; --dy:2px; --scale:1.01; --dur:21s; --delay:-3s;"></div>
+
+  <div class="ambient-blob absolute bottom-[20%] left-[22%]
+              h-[clamp(16rem,28vw,40rem)] w-[clamp(16rem,28vw,40rem)]
+              rounded-full bg-rose-400/5 blur-[150px]"
+       style="--dx:-4px; --dy:3px; --scale:1.012; --dur:23s; --delay:-6s;"></div>
+
+  <div class="ambient-blob absolute top-[65%] right-[35%]
+              h-[clamp(16rem,28vw,40rem)] w-[clamp(16rem,28vw,40rem)]
+              rounded-full bg-violet-400/5 blur-[150px]"
+       style="--dx:3px; --dy:-2px; --scale:1.011; --dur:20s; --delay:-4s;"></div>
+</div>

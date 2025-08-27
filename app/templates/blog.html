@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content_class %}content content--wide{% endblock %}
+
+{% block title %}Blog - Portfolio{% endblock %}
+
+{% block content %}
+  <h1>Blog</h1>
+
+  <div class="blog-shell">
+    <!-- Left: cards -->
+    <section class="blog-list">
+      {% for p in posts %}
+      <article class="post-card" onclick="location.href='/blog/{{ p.slug }}'">
+        <div class="post-card__head">
+          <h2>{{ p.title }}</h2>
+          <span class="meta">{{ p.date }}</span>
+        </div>
+        <div class="post-card__tags">
+          {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+        </div>
+        <div class="post-card__summary">
+          <p>{{ p.summary }}</p>
+        </div>
+      </article>
+      {% endfor %}
+    </section>
+
+    <!-- Right: chatbot panel (placeholder) -->
+    <aside class="blog-assistant">
+      <div class="chat-card">
+        <h3>Ask about my projects</h3>
+        <div class="chat-log" id="chat-log">
+          <div class="msg msg--bot">Ask me about any post, repo, or tech choice. I’m tolerably helpful.</div>
+        </div>
+        <form class="chat-input" onsubmit="return fakeChat(event)">
+          <input type="text" id="chat-text" placeholder="e.g. How do you template pfSense CARP?" autocomplete="off">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

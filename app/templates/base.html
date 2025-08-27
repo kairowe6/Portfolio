@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Portfolio{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+</head>
+<body>
+  {% include "partials/ambient.html" %}
+
+
+  <!-- Top bar for mobile -->
+  <header class="topbar">
+    <button class="menu-btn" aria-label="Open navigation" onclick="toggleMenu()">☰</button>
+    <a class="brand" href="{{ url_for('index') }}">YourName</a>
+  </header>
+
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar__brand">
+        <a href="{{ url_for('index') }}">Kai J. Rowe</a>
+        <span class="role">Systems & Network Engineer</span>
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('blog') }}">Blog</a>
+        <a href="#">Projects</a>
+        <a href="#">Resume</a>
+        <a href="https://github.com/sudoadmin" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+
+      <div class="sidebar__bio">
+        <img src="{{ url_for('static', filename='media/headshot.jpg') }}" alt="Headshot" class="avatar">
+        <p class="bio">
+          Systems & Network Engineer focused on staging and infrastructure automation.
+          I turn manual, error-prone processes into reliable pipelines:
+          declarative configs, repeatable builds, and hands-off provisioning across various platforms including Proxmox, ESXi, pfSense, and others.
+        </p>
+        <a class="email" href="mailto:kairowe6@gmail.com">kairowe6@gmail.com</a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+<main class="{% block content_class %}content{% endblock %}">
+  <div class="content__inner">
+    {% block content %}{% endblock %}
+  </div>
+</main>
+
+    <!-- Featured rail -->
+    <aside class="featured">
+      {% block featured %}
+      <div class="card">
+        <h3>Pinned</h3>
+        <ul class="list">
+          <li><a href="#">Proxmox zero-touch guide</a></li>
+          <li><a href="#">pfSense HA turn-up</a></li>
+          <li><a href="#">TRex ASTF tuning</a></li>
+        </ul>
+      </div>
+      {% endblock %}
+    </aside>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/site.js') }}"></script>
+</body>
+</html>

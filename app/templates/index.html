@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Portfolio{% endblock %}
+
+{% block content %}
+  <h1>Hello, world.</h1>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer feugiat augue sit amet magna viverra, eu sollicitudin sem fermentum. Nulla facilisi. Suspendisse potenti.</p>
+
+  <h2>Subheading</h2>
+  <p>Praesent nec urna eget mauris rhoncus cursus. Pellentesque sagittis, libero at hendrerit pharetra, arcu justo gravida lectus, nec congue lacus neque sit amet metus. Sed aliquam urna non orci tincidunt tristique.</p>
+
+  <p>Quisque a sem a turpis egestas faucibus. Duis eget dictum lacus. Curabitur quis sodales ipsum. In at felis vitae eros dictum sagittis a vitae mi.</p>
+
+  <h2>Code example</h2>
+  <p>Here’s what a config block would look like:</p>
+  <pre><code>
+auto vmbr0
+iface vmbr0 inet static
+    address 192.168.50.10/24
+    gateway 192.168.50.1
+    bridge_ports eth0
+    bridge_stp off
+    bridge_fd 0
+  </code></pre>
+
+  <h2>Bullet points</h2>
+  <ul>
+    <li>Lorem ipsum dolor sit amet.</li>
+    <li>Consectetur adipiscing elit.</li>
+    <li>Integer feugiat augue sit amet magna viverra.</li>
+  </ul>
+
+  <h2>Another section</h2>
+  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+{% endblock %}
