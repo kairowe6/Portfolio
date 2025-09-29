@@ -1,0 +1,65 @@
+<div class="prose">
+
+  <p>I’m in the middle of a bigger project to automate my home, but before I could dive into the fun stuff, I had to solve a very un-fun problem: my network.</p>
+
+  <p>The situation was this:</p>
+  <ul>
+    <li>My modem sat happily in the living room. Great for the average consumer. Useless for me, because my office—and my homelab ambitions—are elsewhere, and this apartment has zero Ethernet runs.</li>
+    <li>I wanted a secure network design where all IoT gadgets live on their own isolated Wi-Fi. That’s a non-negotiable.</li>
+  </ul>
+
+  <p>The obvious solution? A mesh Wi-Fi system with SSID-to-VLAN mapping. The problem? Those systems live in the “prosumer” tax bracket, and I wasn’t keen on selling a kidney. I poked around with Mikrotik, but the cost and complexity were just as bad.</p>
+
+  <h2>The Spark of an Idea</h2>
+  <p>Just when I was about to give up, I stumbled on a video where someone rebuilt a military comms unit using cheap off-the-shelf parts. His focus was long-range HaLow and LoRa radios, but it clicked: why not do the same thing with standard Wi-Fi?</p>
+
+  <p>All I’d need is:</p>
+  <ul>
+    <li>A PCIe Wi-Fi card</li>
+    <li>Some antennas</li>
+    <li>A box running OpenWrt</li>
+  </ul>
+
+  <p>Easy, right?</p>
+
+  <h2>Wrong. Enter the Pi Problem.</h2>
+  <p>My first thought was a Raspberry Pi 4. Problem: no PCIe lane exposed. I found a guy selling a Pi HAT for it, but it shipped from Germany and would’ve taken a month. Strike one.</p>
+
+  <p>Then I looked at CM4 breakout boards. Some gave me PCIe but no Ethernet. To fix that I’d need a PCIe switch and a NIC, which would choke bandwidth. The Pi 5/CM5 looked promising… until I learned OpenWrt support there is still shaky.</p>
+
+  <p>And then I realized I was overthinking. I already had a Proxmox homelab server. I’d bought a renewed Dell Optiplex with 8 cores and 32GB of RAM for the same price as a CM5. It was already running pfSense, Home Assistant, and some Minecraft containers. Why not just spin up an OpenWrt VM and pass through a Wi-Fi card?</p>
+
+  <h2>Hardware Headaches</h2>
+  <p>I grabbed an AsiaRF card with a Mediatek chipset. The card itself uses <strong>IPEX4/MHF4 connectors</strong>, so I ordered pigtails to break that out to SMA. Should’ve been simple.</p>
+
+  <p>Instead I learned the hard way that:</p>
+  <ul>
+    <li><strong>IPEX vs IPEX4 vs U.FL</strong> are all slightly different, and naturally I started with the wrong ones.</li>
+    <li><strong>SMA vs RP-SMA</strong> is another delightful trap. Most antennas are RP-SMA, but my pigtails were plain SMA. So for a while, my “antennas” were basically just the dangling coax leads, weakly radiating signal like a sad science experiment.</li>
+  </ul>
+
+  <p>Eventually I tracked down some high-gain SMA antennas (not nearly as common as RP-SMA) so I didn’t have to redo all the cable routing and the holes I’d drilled into my homelab server.</p>
+
+  <h2>The Network Design</h2>
+  <p>While waiting on proper antennas, I tested with the coax itself—it radiated just enough signal in the same room to get things working. I configured OpenWrt with three SSIDs, each bridged to its own interface in Proxmox and handed off to pfSense:</p>
+
+  <ul>
+    <li><strong>Personal LAN</strong> (5 GHz): our phones, PCs, and consoles.</li>
+    <li><strong>Guest Wi-Fi</strong> (2.4 GHz): internet only, no LAN or IoT access.</li>
+    <li><strong>IoT net</strong> (2.4 GHz): no outbound internet at all, only inbound from the personal LAN. Keeps my smart devices usable but isolates them from phoning home to whatever sketchy server they’d otherwise love to chat with.</li>
+  </ul>
+
+  <p>Yes, the guests share 2.4 GHz with the IoT net. Because honestly? They don’t need the bandwidth.</p>
+
+  <h2>The Antenna Breakthrough</h2>
+  <p>Once the proper antennas finally arrived, the setup came alive. I’m now pulling <strong>~500 Mbps down in my office</strong> with half signal strength—through multiple walls and at the far end of the apartment. Coverage now extends easily from the homelab to my office, solving the original problem that started this whole mess.</p>
+
+  <h2>Next Steps</h2>
+  <ul>
+    <li>Migrating all of my Matter-based IoT devices onto the new isolated IoT LAN.</li>
+    <li>Deploying satellite mesh nodes to extend coverage and backhaul Ethernet into my lab.</li>
+    <li>Stress testing throughput once everything is in place.</li>
+  </ul>
+
+  <p>The takeaway so far: consumer mesh systems may be convenient, but rolling your own with OpenWrt and Proxmox is absolutely possible—if you don’t mind a crash course in RF connector taxonomy and drilling questionable holes in your server chassis.</p>
+</div>

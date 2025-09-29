@@ -1,0 +1,140 @@
+<div class="prose">
+  
+  <p class="lead"> <strong> A case for sparse, plastic, actor-modeled networks that only compute when there’s something to do. </strong></p>
+
+  <hr />
+
+  <h2>TL;DR</h2>
+  <p>
+    Modern LLMs are astonishing feats of engineering, but they trade efficiency and continuous learning for raw scale. Brains are sparse, event-driven, and plastic. I’m exploring an architecture that abandons layers and uses an actor-modeled, event-driven network where neurons self-manage state and only consume compute on events. Expect massive memory footprints, but orders-of-magnitude lower active compute.
+  </p>
+
+  <h2 id="problem">The Problem I’m Trying to Solve</h2>
+  <p>
+    I have deep respect for today’s large language models. They predict the next token with staggering statistical finesse and have opened doors no one thought possible a decade ago. Still, I can’t ignore the inefficiency. Training and serving them demands warehouses of GPUs, and once trained they don’t meaningfully learn during inference.
+  </p>
+  <p>
+    Meanwhile, the human brain runs on about the power draw of a dim light bulb. What it does differently is sparse, context-driven activity with continuous plasticity. Most of the network is idle most of the time. Meaning is carried by which neurons connect and when small ensembles fire together, not by dense matrix multiplies across every layer on every tick.
+  </p>
+
+  <h3>Two pain points with today’s mainstream approach</h3>
+  <ol>
+    <li><strong>Inefficiency by design:</strong> tensor pipelines burn cycles even when there’s no meaningful signal.</li>
+    <li><strong>No ongoing plasticity:</strong> learning is separated from use. Inference is largely read-only.</li>
+  </ol>
+
+  <h2 id="inspiration">The Core Inspiration: Sparsity, Plasticity, Events</h2>
+  <p>
+    Biological networks are sparse by default. At any moment only a tiny subset of neurons fire. Synapses are the memory substrate. This suggests an engineering strategy: represent knowledge as connectivity and timing, not as constantly recomputed dense activations.
+  </p>
+  <ul>
+    <li><strong>Sparse distributed representations:</strong> Numenta’s work on NuPIC and HTM models made a compelling case that sparsity and active dendrites scale and generalize well.</li>
+    <li><strong>Event-driven dynamics:</strong> computation happens on spikes and messages, not on clocks. If nothing happens, nothing computes.</li>
+    <li><strong>Plasticity in the loop:</strong> changes to synapses are part of everyday operation, not a special offline phase.</li>
+  </ul>
+
+  <h2 id="nolayers">Breaking with Layers</h2>
+  <p>
+    Even projects I admire still inherit the layered stack as a deep assumption. I’m dropping it. Instead, I’m using an <strong>actor-modeled network</strong>:
+  </p>
+  <ul>
+    <li><strong>Actors = neurons.</strong> Each neuron is a small state machine with mailboxes for incoming spikes and modulators.</li>
+    <li><strong>Messages = spikes.</strong> Synapses deliver events with weights and delays.</li>
+    <li><strong>Schedulers = time.</strong> The system advances by processing event queues, not fixed global ticks.</li>
+  </ul>
+  <p>
+    The goal is to make the network’s <em>execution model</em> match the thing it simulates. If no spikes arrive, we don’t do any work on that neuron. When spikes arrive, the neuron integrates them, updates its membrane state, maybe fires, updates outgoing synapses, and moves on.
+  </p>
+
+  <h2 id="hypothesis">My Hypothesis</h2>
+  <p>
+    If neurons self-manage their state and the runtime only spends compute when neurons receive events or cross thresholds, then a sufficiently large network can be <strong>highly efficient</strong> in active compute while remaining <strong>capable</strong> due to scale and plasticity. The obvious tradeoff: <strong>memory explodes.</strong> You must persist state for every neuron and its synapses even while dormant. I’m willing to pay that cost.
+  </p>
+
+  <h2 id="biology-first">Biology-First, Not Biology-Literal</h2>
+  <p>
+    I’m not trying to simulate wet biology for its own sake. I only keep dynamics that are <strong>meaningful at the network level</strong>:
+  </p>
+  <ul>
+    <li><strong>Keep:</strong> spiking, refractory periods, inhibitory surround, synaptic plasticity, global modulators (reward/stress/novelty), delays.</li>
+    <li><strong>Drop or abstract:</strong> waste clearance, metabolic cycles, detailed ion channel kinetics, anything whose micro-accuracy doesn’t improve behavior.</li>
+  </ul>
+  <p>
+    A practical rule: if a neuron’s state is just decaying, I don’t simulate it every millisecond. I can analytically compute its value on demand when the next event arrives. That preserves the behavior without burning cycles on empty time.
+  </p>
+
+  <h2 id="prior-art">Prior Art That Shapes This</h2>
+  <ul>
+    <li><strong>Numenta’s HTM and NuPIC:</strong> pioneered SDRs, sequence memory, and active dendrites — all invaluable inspirations for thinking about sparse representations.</li>
+    <li><strong>Spiking neuron models (e.g., LIF):</strong> elegant simplifications that introduced spiking dynamics into computing. Their limitation was being too tied to step-by-step simulation, not their conceptual contribution.</li>
+    <li><strong>Neuromorphic/actor systems:</strong> showed how event-driven scheduling maps well to spiking activity. I see my work as an extension, not a rejection.</li>
+  </ul>
+  <p>
+    My divergence is pragmatic: avoid simulation hell and aim for a runnable machine. The goal isn’t fidelity for its own sake but a system that scales and behaves usefully.
+  </p>
+
+  <h2 id="plan">The Three-Phase Plan</h2>
+
+  <h3>Phase 1: Research and Simulation Abstraction (Python)</h3>
+  <ul>
+    <li>Build a Python prototype with an event handler and actor messaging.</li>
+    <li>Implement neuron types: excitatory first, inhibitory next; explicit refractory behavior; per-synapse delays; local STDP-like plasticity.</li>
+    <li>Add <strong>global modulators</strong> as signals that scale plasticity and thresholds (reward, surprise, stress).</li>
+    <li>Replace continuous decay with <strong>on-demand state updates</strong> derived analytically at event time.</li>
+    <li>Validate on simple tasks (pattern completion, online sequence learning) and a classic dataset for sanity checks.</li>
+  </ul>
+
+  <h3>Phase 2: Make It a Machine (Rust)</h3>
+  <ul>
+    <li>Port the runtime to Rust for memory safety, cache-efficiency, and concurrency.</li>
+    <li>Represent neurons and synapses in compact arenas; design message queues that minimize cache misses.</li>
+    <li>Preserve the event-driven API so research code and tools from Phase 1 port cleanly.</li>
+  </ul>
+
+  <h3>Phase 3: Experiments and Behaviors</h3>
+  <ul>
+    <li><strong>Sensory mockups:</strong> cheap visual and auditory sensors producing sparse events.</li>
+    <li><strong>Working vs long-term memory:</strong> test whether the same substrate can exhibit both by dynamics alone.</li>
+    <li><strong>Conversational behavior:</strong> investigate whether a spiking, event-driven system can sustain a chat task with online plasticity.</li>
+  </ul>
+
+  <h2 id="success">Success Criteria</h2>
+  <ul>
+    <li><strong>Compute:</strong> active compute scales with event rate, not parameter count.</li>
+    <li><strong>Plasticity:</strong> the network learns continuously during use without catastrophic drift.</li>
+    <li><strong>Robustness:</strong> sparse codes tolerate noise and partial input.</li>
+    <li><strong>Latency:</strong> responses occur within tight event windows, not fixed frame steps.</li>
+  </ul>
+
+  <h2 id="risks">Risks and How I’m Addressing Them</h2>
+  <ul>
+    <li><strong>Memory blow-up:</strong> aggressively compress connectivity and use pooled allocators; make pruning strategies part of learning.</li>
+    <li><strong>Runaway activity:</strong> inhibitory control and refractory windows are first-class citizens.</li>
+    <li><strong>Over-abstraction:</strong> unit tests compare analytic updates vs high-resolution micro-simulation on small motifs.</li>
+  </ul>
+
+  <h2 id="learning">What I Expect to Learn</h2>
+  <ul>
+    <li>Which biological dynamics actually matter for function.</li>
+    <li>How far we can push on-demand state updates before accuracy breaks.</li>
+    <li>Whether sparse, event-driven architectures can punch above their compute weight on real tasks.</li>
+  </ul>
+
+  <h2 id="reading">Further Reading</h2>
+    <ul>
+    <li class="link"><a href="https://www.numenta.com/assets/pdf/biological-and-machine-intelligence/BaMI-SDR.pdf" target="_blank">Sparse Distributed Representations (Numenta's “Biological and Machine Intelligence” chapter on SDRs)</a></li>
+    <li class="link"><a href="https://www.numenta.com/blog/2019/10/24/machine-learning-guide-to-htm/" target="_blank">A Machine Learning Guide to HTM (Numenta blog overview of HTM and SDR principles)</a></li>
+    <li class="link"><a href="https://discourse.numenta.org/t/sparse-distributed-representation-class/5645" target="_blank">HTM School: Introduction to Sparse Distributed Representations (Numenta forum class)</a></li>
+    <li class="link"><a href="https://snntorch.readthedocs.io/en/latest/tutorials/tutorial_2.html" target="_blank">Tutorial 2 – The Leaky Integrate-and-Fire Neuron (snnTorch tutorial)</a></li>
+    <li class="link"><a href="https://neuronaldynamics.epfl.ch/online/Ch1.S3.html" target="_blank">Leaky Integrate-and-Fire Model Basics (EPFL’s Neuronal Dynamics online book)</a></li>
+    <li class="link"><a href="https://en.wikipedia.org/wiki/Hierarchical_temporal_memory" target="_blank">Hierarchical Temporal Memory (Wikipedia page summarizing HTM theory and context)</a></li>
+    <li class="link"><a href="https://en.wikipedia.org/wiki/Neuromorphic_computing" target="_blank">Neuromorphic Computing (Wikipedia intro to the field, its motivation and implementations)</a></li>
+    <li class="link"><a href="https://www.baeldung.com/cs/neuromorphic-computing-explained" target="_blank">Neuromorphic Computing Explained (clear tutorial introducing the core concepts)</a></li>
+    <li class="link"><a href="https://arxiv.org/abs/2403.00270" target="_blank">Event-Driven Learning for Spiking Neural Networks (2024 arXiv paper on sparse, energy-efficient learning algorithms)</a></li>
+    </ul>
+
+  <h2 id="closing">Closing</h2>
+  <p>
+    Brains are mostly quiet, but ready. They compute hard only when signals arrive, and they learn while they live. That’s the spirit here: build a network that is sparse, plastic, and awake only when it needs to be. If it works, it won’t replace LLMs or past models — it will stand alongside them, inspired by their successes but carving its own niche.
+  </p>
+</div>

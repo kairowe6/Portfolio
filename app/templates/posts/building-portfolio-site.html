@@ -1,0 +1,310 @@
+<div class="prose">
+  <h2>Building the Portfolio: Purpose and Approach</h2>
+  <p>
+    Every portfolio site exists for the same reason: it’s a personal space to showcase work. 
+    Mine is no different in that regard. The twist is that I don’t just want a static gallery 
+    of projects. I also want this space to double as a place to share guides and tutorials—like 
+    this one—so others can learn from the same techniques I use in my day-to-day work. Writing 
+    about the process not only helps me refine my own approach, but also lowers the barrier for 
+    anyone else who wants to build similar systems.
+  </p>
+
+  <p>
+    That’s why I deliberately avoided website builders or cookie-cutter templates. Most of my 
+    professional and personal work centers on scripting, automation, and DIY problem-solving. 
+    Using a drag-and-drop builder would have been completely counter to the spirit of what I’m 
+    trying to demonstrate. If I want to show that I can design and automate solutions from 
+    scratch, my portfolio needs to reflect that philosophy.
+  </p>
+
+  <h3>Framework Choices</h3>
+  <p>
+    For the foundation, I leaned into my default toolset: <strong>Flask</strong>. Since Python 
+    is my go-to language, Flask feels like the most natural framework. It’s lightweight, 
+    flexible, and pairs perfectly with <strong>Jinja</strong>, which I already use constantly 
+    in my automation projects. Flask plus Jinja makes spinning up complex systems fast and 
+    intuitive—it’s the same pattern I rely on when automating deployments or generating configs.
+  </p>
+
+  <p>
+    For styling and layout, I chose <strong>Tailwind CSS</strong>. It’s minimal, utility-first, 
+    and allows me to build custom designs quickly without drowning in endless CSS files. 
+    Tailwind keeps the focus on functionality while still giving me room to create a polished, 
+    modern look. It’s especially useful here because I don’t need to reinvent the wheel for 
+    basic layout elements, and I can spend my time on the creative and technical flourishes—
+    like the animated background demo below.
+  </p>
+<section>
+  <h2>Why Flask and Jinja Make Sense Together</h2>
+  <p>
+    If you already know a bit of Python, Flask and Jinja are surprisingly easy to pick up. 
+    Together, they turn Python into a simple but powerful tool for building websites.
+  </p>
+
+  <h3>What Flask Does</h3>
+  <p>
+    Flask is a lightweight web framework. At its core, it takes care of handling web requests 
+    and sending back responses. Here’s a minimal Flask app:
+  </p>
+
+  <pre><code class="language-python">
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Hello, world!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+  </code></pre>
+
+  <p>
+    That’s the entire setup needed to start a local web server. Visit 
+    <code>http://localhost:5000</code> and Flask will return whatever you define in 
+    <code>hello()</code>.
+  </p>
+
+  <h3>Where Jinja Fits In</h3>
+  <p>
+    Returning plain text isn’t very exciting, though. That’s where Jinja comes in. 
+    Jinja is a template engine, which means you can mix Python-like logic into your 
+    HTML without hardcoding everything. Here’s a Jinja template:
+  </p>
+
+  <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;&lt;title&gt;Hello&lt;/title&gt;&lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, {% raw %}{{ name }}{% endraw %}!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+  </code></pre>
+
+  <p>
+    Notice the <code>{% raw %}{{ name }}{% endraw %}</code>. That’s a placeholder. When Flask renders this 
+    template, it swaps in real data.
+  </p>
+
+  <h3>Putting Them Together</h3>
+  <p>
+    Here’s how Flask uses Jinja to render that template:
+  </p>
+
+  <pre><code class="language-python">
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route("/&lt;username&gt;")
+def greet(username):
+    return render_template("hello.html", name=username)
+
+if __name__ == "__main__":
+    app.run(debug=True)
+  </code></pre>
+
+  <p>
+    Now if you visit <code>http://localhost:5000/Alice</code>, Flask will pass 
+    <code>"Alice"</code> into the Jinja template, and the page will say 
+    <em>Hello, Alice!</em>.
+  </p>
+
+  <h3>Why It Works So Well</h3>
+  <p>
+    Flask and Jinja are a natural pairing because Flask handles the logic of the 
+    application, while Jinja handles how that logic gets displayed on the page. 
+    For someone used to writing Python scripts, it feels like a smooth, 
+    low-resistance way to build web apps. The same language and patterns you use 
+    for automation carry over directly into creating dynamic websites.
+  </p>
+</section>
+
+
+  <h2>Making the Page Breathe</h2>
+  <p>
+    The ambient background effect is entirely CSS. Each blob is just a radial gradient blurred into
+    softness, positioned with custom properties, and animated with a simple <code>@keyframes</code>.
+    By keeping the effect declarative, the browser can optimize it — no JavaScript render loops and
+    no extra libraries needed.
+  </p>
+
+  <h3>How it works</h3>
+  <p>
+    The variables (<code>--color</code>, <code>--size</code>, <code>--blur</code>, <code>--x</code>,
+    <code>--y</code>, etc.) define the blob’s appearance and placement. The <code>@keyframes</code>
+    animation (“breathe”) reads <code>--dx</code>, <code>--dy</code>, and <code>--scale</code> to
+    control how much the blob drifts and expands during each cycle. Changing the variables changes
+    the entire animation live.
+  </p>
+
+  <h3>Parameters you can edit</h3>
+  <ul>
+    <li><code>--color</code> — the radial gradient color.</li>
+    <li><code>--size</code> — the blob’s diameter.</li>
+    <li><code>--blur</code> — the blur radius (softer vs sharper edges).</li>
+    <li><code>--x</code>, <code>--y</code> — where the blob is anchored on screen.</li>
+    <li><code>--dx</code>, <code>--dy</code> — drift distance during the “breath.”</li>
+    <li><code>--scale</code> — how much the blob grows at peak inhale.</li>
+    <li><code>--dur</code> — how long one cycle takes.</li>
+    <li><code>--delay</code> — stagger start time (useful with multiple blobs).</li>
+    <li><code>--bgOpacity</code> — opacity of the subtle vignette behind the blobs.</li>
+  </ul>
+
+  <p>
+    Below you can see the full CSS that wires this together, with editable tokens for the variables.
+    Adjust them and watch the preview update instantly.
+  </p>
+</div>
+
+
+
+
+<div class="full" style="margin-top:0.75rem; margin-bottom:1rem;">
+  <section class="demo-lab" id="ambient-lab" data-base="/play/ambient">
+    <!-- Preview -->
+    <div class="panel preview">
+      <iframe id="ambient-frame"
+              src="/play/ambient?color=rgba(255,215,0,0.12)&x=-15vw&y=8vh&size=42rem&blur=180px&dur=24s"
+              loading="lazy"></iframe>
+    </div>
+
+    <!-- Code-like editor with inline editable tokens -->
+    <div class="panel codeblock">
+      <div class="actions">
+        <button class="btn" type="button" onclick="copyAmbientHTML()">Copy HTML</button>
+      </div>
+
+<pre><code><pre><code>&lt;style&gt;
+  :root{
+    --color: <span class="token-edit" contenteditable="true" data-key="color">rgba(255,215,0,0.12)</span>;
+    --size: <span class="token-edit" contenteditable="true" data-key="size">42rem</span>;
+    --blur: <span class="token-edit" contenteditable="true" data-key="blur">180px</span>;
+    --x: <span class="token-edit" contenteditable="true" data-key="x">-15%</span>;
+    --y: <span class="token-edit" contenteditable="true" data-key="y">8%</span>;
+    --dx: <span class="token-edit" contenteditable="true" data-key="dx">4px</span>;
+    --dy: <span class="token-edit" contenteditable="true" data-key="dy">-3px</span>;
+    --scale: <span class="token-edit" contenteditable="true" data-key="scale">1.015</span>;
+    --dur: <span class="token-edit" contenteditable="true" data-key="dur">24s</span>;
+    --delay: <span class="token-edit" contenteditable="true" data-key="delay">-3s</span>;
+    --bgOpacity: <span class="token-edit" contenteditable="true" data-key="bgOpacity">0.03</span>;
+  }
+
+  @keyframes breathe {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%     { transform: translate(var(--dx), var(--dy)) scale(var(--scale)); }
+  }
+
+  .blob {
+    position: absolute; inset: 0;
+    margin: auto;
+    width: var(--size); height: var(--size);
+    border-radius: 9999px;
+    background: radial-gradient(circle, var(--color) 0%, rgba(0,0,0,0) 70%);
+    filter: blur(var(--blur));
+    animation: breathe var(--dur) ease-in-out infinite;
+    animation-delay: var(--delay);
+    will-change: transform;
+  }
+
+  .stage {
+    position: fixed; inset: 0;
+    background: radial-gradient(50% 50% at 50% 50%, rgba(147,197,253,var(--bgOpacity)) 0%, rgba(147,197,253,0) 70%);
+    overflow: hidden;
+  }
+
+  .anchor {
+    position: absolute;
+    translate: var(--x) var(--y);
+  }
+&lt;/style&gt;
+
+&lt;div class="stage"&gt;
+  &lt;div class="anchor"&gt;
+    &lt;div class="blob"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</code></pre>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const lab   = document.getElementById('ambient-lab');
+  if(!lab) return;
+
+  const base  = lab.dataset.base || '/play/ambient';
+  const frame = document.getElementById('ambient-frame');
+  const tokens = Array.from(document.querySelectorAll('.token-edit'));
+
+  function withUnit(val, fallbackUnit){
+    const s = String(val).trim();
+    return /%|px|rem|vh|vw|s$/.test(s) ? s : s + fallbackUnit;
+  }
+
+  function readStateFromTokens(){
+    const s = {};
+    tokens.forEach(t => s[t.dataset.key] = t.textContent.trim());
+    return s;
+  }
+
+  function buildURL(state){
+    const p = new URLSearchParams();
+    p.set('color', state.color);
+    p.set('size',  withUnit(state.size, 'rem'));
+    p.set('blur',  withUnit(state.blur, 'px'));
+    p.set('x',     withUnit(state.x, 'vw'));
+    p.set('y',     withUnit(state.y, 'vh'));
+    p.set('dx',    withUnit(state.dx, 'px'));
+    p.set('dy',    withUnit(state.dy, 'px'));
+    p.set('scale', state.scale);
+    p.set('dur',   withUnit(state.dur, 's'));
+    p.set('delay', withUnit(state.delay, 's'));
+    p.set('bgOpacity', state.bgOpacity);
+    return base + '?' + p.toString();
+  }
+
+  function updateFromTokens(){
+    const s = readStateFromTokens();
+    frame.src = buildURL(s);
+  }
+
+  tokens.forEach(t => t.addEventListener('input', updateFromTokens));
+  updateFromTokens();
+
+  window.copyAmbientHTML = function(){
+    const code = document.querySelector('.codeblock pre').innerText;
+    navigator.clipboard?.writeText(code);
+  };
+})();
+</script>
+
+
+<section class="prose" style="margin-top:2rem;">
+  <h2>Bringing It All Together</h2>
+  <p>
+    What started as a portfolio quickly became something more. It’s not just a collection 
+    of projects—it’s proof that building things yourself is worth the effort. By leaning on 
+    tools like Flask, Jinja, and Tailwind, I didn’t just assemble a website; I built a space 
+    that reflects the same mindset I use in my work: solve problems directly, understand 
+    the moving parts, and leave behind something others can learn from.
+  </p>
+
+  <p>
+    A website builder might have gotten me here faster, but it would have also hidden the 
+    process. The process <em>is</em> the point. Sharing code, breaking down steps, and showing 
+    how the pieces connect—that’s the real value. If someone can come here, learn something, 
+    and then build their own version of what I’ve built, then this portfolio has already done 
+    its job.
+  </p>
+
+  <p>
+    In the end, this project isn’t about HTML or Python or CSS at all. It’s about making the 
+    choice to engage with the tools at your disposal, to create something original, and to 
+    share it openly. That philosophy goes a lot further than a personal website—and it’s the 
+    same philosophy I plan to carry into every project that follows.
+  </p>
+</section>

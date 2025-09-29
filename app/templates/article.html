@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ meta.title }} — Portfolio{% endblock %}
+
+{% block content %}
+  <article id="post-article">
+    <div class="prose">
+      <header style="margin-bottom:1.2rem">
+        <h1>{{ meta.title }}</h1>
+        <p class="meta" style="color:var(--muted); font-size:0.9rem;">
+          {{ meta.date }}
+          {% if meta.tags %}
+            · {% for t in meta.tags %}
+              <span class="tag">{{ t }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          {% endif %}
+        </p>
+      </header>
+    </div>
+
+    {# The post body can interleave .prose (72ch) and .full (wide) #}
+    {% include 'posts/' ~ slug ~ '.html' %}
+  </article>
+  <div class="hero-spacer"></div>
+
+  <script>
+  // Anchor the fade to the viewport bottom for every .prose in this article only
+  (function () {
+    const scope = document.getElementById('post-article');
+    if (!scope) return;
+
+    const blocks = Array.from(scope.querySelectorAll('.prose'));
+    if (!blocks.length) return;
+
+    function tick(){
+      const scrollY = window.scrollY || 0;
+      for (const el of blocks){
+        // element's top in document space
+        const elDocTop = el.getBoundingClientRect().top + scrollY;
+        // shift mask so its 100vh gradient hugs the viewport bottom
+        el.style.setProperty('--proseMaskY', (scrollY - elDocTop) + 'px');
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+  </script>
+{% endblock %}

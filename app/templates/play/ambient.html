@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ambient Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Utility-only; fine inside the iframe -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --color: {{ color|safe }};
+      --size: {{ size }};
+      --blur: {{ blur }};
+      --x: {{ x }};         /* accept %, px, vw, vh */
+      --y: {{ y }};
+      --dx: {{ dx }};
+      --dy: {{ dy }};
+      --scale: {{ scale }};
+      --dur: {{ dur }};
+      --delay: {{ delay }};
+      --bgOpacity: {{ bgOpacity }};
+    }
+
+    /* breathing motion */
+    @keyframes breathe {
+      0%,100% { transform: translate(-50%, -50%) translate(var(--x), var(--y)) translate(0,0) scale(1); }
+      50%     { transform: translate(-50%, -50%) translate(var(--x), var(--y)) translate(var(--dx), var(--dy)) scale(var(--scale)); }
+    }
+
+    /* stage fills the iframe */
+    html, body { height: 100%; margin: 0; background: transparent; }
+    .stage {
+      position: fixed; inset: 0;
+      background: radial-gradient(52% 52% at 50% 50%, rgba(147,197,253,var(--bgOpacity)) 0%, rgba(147,197,253,0) 70%);
+      overflow: hidden;
+    }
+
+    /* anchor sits at viewport center; we offset via CSS vars */
+    .anchor {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 0; height: 0;
+      transform: translate(-50%, -50%) translate(var(--x), var(--y));
+      pointer-events: none;
+    }
+
+    /* actual blob */
+    .blob {
+      position: absolute;
+      left: 0; top: 0;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 9999px;
+      background: radial-gradient(circle, var(--color) 0%, rgba(0,0,0,0) 70%);
+      filter: blur(var(--blur));
+      will-change: transform;
+      animation: breathe var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .blob { animation: none; transform: translate(-50%, -50%) translate(var(--x), var(--y)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <!-- Anchor point at center; blob centered relative to it -->
+    <div class="anchor">
+      <div class="blob"></div>
+    </div>
+  </div>
+</body>
+</html>

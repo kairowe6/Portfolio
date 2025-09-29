@@ -4,9 +4,20 @@
   <meta charset="utf-8">
   <title>{% block title %}Portfolio{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Tailwind CDN, with preflight (global reset) DISABLED -->
+  <script>
+    window.tailwind = {};
+    tailwind.config = {
+      corePlugins: { preflight: false }
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Your CSS must load AFTER Tailwind so your rules win -->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
 </head>
+
 <body>
   {% include "partials/ambient.html" %}
 
@@ -29,8 +40,7 @@
         <a href="{{ url_for('index') }}">Home</a>
         <a href="{{ url_for('blog') }}">Blog</a>
         <a href="#">Projects</a>
-        <a href="#">Resume</a>
-        <a href="https://github.com/sudoadmin" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/kairowe6" target="_blank" rel="noopener">GitHub</a>
       </nav>
 
       <div class="sidebar__bio">
@@ -46,10 +56,13 @@
 
     <!-- Main content -->
 <main class="{% block content_class %}content{% endblock %}">
-  <div class="content__inner">
+  <!-- Wide middle track between sidebar and featured rail -->
+  <div class="content__wide">
     {% block content %}{% endblock %}
   </div>
 </main>
+
+
 
     <!-- Featured rail -->
     <aside class="featured">
@@ -66,6 +79,11 @@
     </aside>
   </div>
 
+
+  <div class="viewport-fade" aria-hidden="true"></div>
+
   <script src="{{ url_for('static', filename='js/site.js') }}"></script>
 </body>
 </html>
+
+

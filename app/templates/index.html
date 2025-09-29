@@ -3,33 +3,82 @@
 {% block title %}Home - Portfolio{% endblock %}
 
 {% block content %}
-  <h1>Hello, world.</h1>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer feugiat augue sit amet magna viverra, eu sollicitudin sem fermentum. Nulla facilisi. Suspendisse potenti.</p>
-
-  <h2>Subheading</h2>
-  <p>Praesent nec urna eget mauris rhoncus cursus. Pellentesque sagittis, libero at hendrerit pharetra, arcu justo gravida lectus, nec congue lacus neque sit amet metus. Sed aliquam urna non orci tincidunt tristique.</p>
-
-  <p>Quisque a sem a turpis egestas faucibus. Duis eget dictum lacus. Curabitur quis sodales ipsum. In at felis vitae eros dictum sagittis a vitae mi.</p>
-
-  <h2>Code example</h2>
-  <p>Here’s what a config block would look like:</p>
-  <pre><code>
-auto vmbr0
-iface vmbr0 inet static
-    address 192.168.50.10/24
-    gateway 192.168.50.1
-    bridge_ports eth0
-    bridge_stp off
-    bridge_fd 0
-  </code></pre>
-
-  <h2>Bullet points</h2>
-  <ul>
-    <li>Lorem ipsum dolor sit amet.</li>
-    <li>Consectetur adipiscing elit.</li>
-    <li>Integer feugiat augue sit amet magna viverra.</li>
-  </ul>
-
-  <h2>Another section</h2>
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium. Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+  <div class="prose">
+    <section>
+      <div class="hero-spacer"></div>
+      <h1>Welcome to My Portfolio</h1>
+      <p>
+        This site is my space to share the work I’ve done and the lessons I’ve learned, in a way that makes
+        sense in today’s world—one where artificial intelligence is reshaping how we all think about coding,
+        learning, and building.
+      </p>
+      <div class="section-divider"></div>
+      <div class="section-divider"></div>
+      <div class="section-divider"></div>
+      <div class="section-divider"></div>
+      <h2>About Me</h2>
+      <p>
+        My career started in IT staging. It was a crash course in touching more systems than I probably
+        should have been trusted with. Working at a startup gave me the kind of freedom that fuels rapid
+        growth. It was the kind of environment where stepping outside your comfort zone wasn’t a liability—it
+        was expected.
+      </p>
+      <p>
+        Even in my first year, I was chasing efficiency. I built small Python command-line wizards that
+        generated pfSense configuration files, shaving hours off repetitive tasks. Later, I moved into
+        service delivery, working directly with customers to integrate the very systems I had staged. That
+        role carried a different kind of stress and forced me to become reliable under pressure. It also
+        showed me how error-prone human processes can be, no matter how skilled the people involved.
+      </p>
+      <p>
+        Those lessons pushed me into automation. My first automation initiative focused on making staging
+        consistent and repeatable, eliminating human mistakes. It worked beautifully—right up until the
+        moment someone wanted to change a “tiny” detail I hadn’t built in as a variable. That failure was a
+        turning point. In the second iteration, I had to design not just for the known variables, but also
+        for the unknowns. That mindset—planning for what you can’t predict—was the moment I crossed
+        into being an engineer capable of delivering systems and products above industry standard.
+      </p>
+      <div class="section-divider"></div>
+      <h2>The Role of AI in My Work</h2>
+      <p>
+        Let’s be honest: most guides, tutorials, and “learn to code” content have been fundamentally altered
+        by AI. Pretending otherwise would be disingenuous. I use AI—a lot. But I don’t see it as a crutch.
+        To me, AI has shifted my attention away from manually writing every line of code and toward
+        designing entire systems. It allows me to abstract my thoughts, focus on architecture, and spend my
+        time solving the bigger problems rather than grinding out boilerplate.
+      </p>
+      <p>
+        In this new landscape, the value of an engineer isn’t just writing good code. Anyone with an AI assistant
+        can now produce decent code with minimal training. The real value lies in guiding
+        projects: selecting frameworks, designing the moving parts, moving information efficiently, and
+        maintaining logical flow across the entire system. AI can amplify those skills, but it can’t replace
+        them.
+      </p>
+      <p>
+        That doesn’t mean you can skip learning how to code. As good as AI is, you still have to proofread,
+        debug, and apply judgment. AI can’t yet deduce the best solution to a complex issue on its own.
+        Working with it often feels like coding in English—you still need to break down problems, decide on
+        the right approach, and feed it crystal-clear instructions. People who try to “throw AI at the
+        problem” usually end up with half-baked code littered with placeholders like
+        <code>'/path/to/your/file'</code>. AI is powerful, but only in the hands of someone who knows how to
+        direct it.
+      </p>
+      <p>
+        This philosophy will guide how I write my blog posts and structure this portfolio. I won’t be writing
+        endless “how to code” tutorials—that part is mostly obsolete. Instead, I’ll focus on explaining the design
+        and decision-making process: how to select the right tools, how to structure a system, and how to
+        think like an engineer in the modern era.
+      </p>
+      <div class="section-divider"></div>
+      <h2>What to Expect Here</h2>
+      <p>
+        This site is not just a showcase of my projects. It’s a reflection of my approach to engineering in
+        the age of AI: embracing the tools we have, thinking carefully about design, and building systems
+        that last. If you’re here for step-by-step coding tutorials, you won’t find many. What you will find
+        is something more useful: insight into the thought process behind complex systems and the philosophy
+        that drives them.
+      </p>
+      <div class="hero-spacer"></div>
+    </section>
+  </div>
 {% endblock %}

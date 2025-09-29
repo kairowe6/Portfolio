@@ -1,0 +1,25 @@
+{
+  "posts": [
+    {
+      "slug": "building-portfolio-site",
+      "title": "How I Built This Portfolio (and Why I Didn’t Use a Website Builder)",
+      "date": "2025-08-28",
+      "tags": ["flask", "css", "tailwind"],
+      "summary": "Stack, design choices, subtle ambient background, and interactive bits."
+    },
+    {
+      "slug": "SNN-Intro",
+      "title": "Why I’m Building a Biologically Inspired, Event-Driven SNN",
+      "date": "2025-09-08",
+      "tags": ["neuroscience", "machine-learning", "spiking-networks", "rust", "python"],
+      "summary": "Exploring sparse, plastic, actor-modeled neural networks that only compute on events, aiming for efficiency inspired by biology rather than GPU warehouses."
+    },
+    {
+      "slug": "diy-wifi-mesh-openwrt-proxmox",
+      "title": "DIY Wi-Fi Mesh with OpenWrt and Proxmox (An Ongoing Experiment)",
+      "date": "2025-09-29",
+      "tags": ["openwrt", "proxmox", "homelab", "networking", "iot"],
+      "summary": "Rolling my own mesh Wi-Fi system with VLAN separation using OpenWrt in Proxmox, complete with RF connector headaches, 500 Mbps performance, and plans for Matter IoT migration."
+    }
+  ]
+}
